@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"practicewebapplication/pkg/config"
-	"practicewebapplication/pkg/handlers"
-	"practicewebapplication/pkg/render"
+	"practicewebapplication/internal/config"
+	"practicewebapplication/internal/handlers"
+	"practicewebapplication/internal/render"
 	"time"
 
 	"github.com/alexedwards/scs/v2"

@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-	"practicewebapplication/pkg/config"
-	"practicewebapplication/pkg/handlers/models"
+	"practicewebapplication/internal/config"
+	"practicewebapplication/internal/models"
+
+	"github.com/justinas/nosurf"
 )
 
 var app *config.AppConfig
@@ -17,14 +19,14 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
-
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
 // RenderTemplate renders template using HTML template
 // COMPLEX TEMPLATE CACHE SYSTEM
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 	//tc is a variable to hold template cache
 	var tc map[string]*template.Template
 
@@ -51,7 +53,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	_ = t.Execute(buf, td)
 
